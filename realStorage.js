@@ -30,6 +30,7 @@ var store = localStorage;
    STANDARD
    The number of entries in the store.
 */
+// XXX Use a getter when possible
 realStorage.length = store.length;
 
 

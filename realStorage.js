@@ -5,12 +5,12 @@
 (function() {
 
 // No need to re-initialize
-if (realStorage) {
+if (window.realStorage) {
     return;
 }
 
 // localStorage is a pre-requisite
-if (!localStorage) {
+if (!window.localStorage) {
     throw new Error("realStorage requires localStorage");
 }
 

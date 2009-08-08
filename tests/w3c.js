@@ -22,24 +22,26 @@ test("getItem returns null for non-existent keys", function() {
         "null returned for non-existent key");
 });
 
-test("key for setItem/getItem converted to a string", function() {
+test("key for getItem converted to a string", function() {
     var key = 42;
+    var repr = "42";
     var value = "nothing";
-    store.setItem(key, "nothing");
-    same(store.getItem(key), value, "key as a non-string");
-    same(store.getItem(key.toString()), value, "key converted to string");
+    store.setItem(repr, value);
+    same(store.getItem(key), value, "key given as a non-string");
 });
 
-test("value for setItem converted to a string (Firefox 3.5 incompatibility)",
+test("key/value for setItem converted to a string (Firefox 3.5 incompatibility)",
     function() {
-        var values = [[42, "42"], [null, "null"], [undefined, "undefined"]];
-        var key = "42";
-        for (var x=0; x < values.length; x+=1) {
-            var value = values[x][0];
-            var repr = values[x][1];
-            store.setItem(key, value);
-            same(store.getItem(key), repr,
-                 repr + " returned as a string");
+        var to_test = [[42, "42"], [null, "null"], [undefined, "undefined"]];
+        var str = "42";
+        for (var x=0; x < to_test.length; x+=1) {
+            var value = to_test[x][0];
+            var repr = to_test[x][1];
+            store.setItem(str, value);
+            same(store.getItem(str), repr,
+                 repr + " returned as a string value");
+            store.setItem(value, str);
+            same(store.getItem(repr), str, repr + " set as the key");
         }
     });
 

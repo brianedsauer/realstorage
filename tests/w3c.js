@@ -182,39 +182,9 @@ test("'key' returns null when given an index >= the # of keys " +
 
 // XXX attrs are stored
 
-/* XXX Whenever the properties of a localStorage attribute's Storage object are
-   to be examined, returned, set, or deleted, whether as part of a direct
-   property access, when checking for the presence of a property, during
-   property enumeration, when determining the number of properties present, or
-   as part of the execution of any of the methods or attributes defined on the
-   Storage interface. the user agent must first obtain the storage mutex. */
+// XXX storage mutex
 
-/* XXX When the setItem(), removeItem(), and clear() methods are called on a
-   Storage object x that is associated with a local storage area, if the
-   methods did something, then in every HTMLDocument object whose Window
-   object's localStorage attribute's Storage object is associated with the same
-   storage area, other than x, a storage event must be fired */
+// XXX storage event
 
-/* XXX If the event is being fired due to an invocation of the setItem() or
-   removeItem() methods, the event must have its key attribute set to the name
-   of the key in question, its oldValue attribute set to the old value of the
-   key in question, or null if the key is newly added, and its newValue
-   attribute set to the new value of the key in question, or null if the key
-   was removed.
-
-    Otherwise, if the event is being fired due to an invocation of the clear()
-    method, the event must have its key, oldValue, and newValue attributes set to
-    null.
-
-    In addition, the event must have its url attribute set to the address of the
-    document whose Storage object was affected; its source attribute set to the
-    that document's browsing context's WindowProxy object, if the two documents are
-    in the same unit of related browsing contexts, or null otherwise; and its
-    storageArea attribute set to the Storage object from the Window object of the
-    target Document that represents the same kind of Storage area as was affected
-    (i.e. session or local) */   
-
-/* XXX The initStorageEvent() and initStorageEventNS() methods must initialize
-   the event in a manner analogous to the similarly-named methods in the DOM3
-   Events interfaces. */
+// XXX initStorageEvent() and initStorageEventNS()
 })();

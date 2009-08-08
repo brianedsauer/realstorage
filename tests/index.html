@@ -26,6 +26,9 @@
                 }
             }
         window.teststore = window[teststore];
+        if (!window.teststore) {
+            alert("test Storage instance " + teststore + " not found");
+        }
         })();
         </script>
         <!-- Tests -->

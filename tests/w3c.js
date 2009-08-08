@@ -157,6 +157,21 @@ test("'key' stable as long as no keys added/removed", function() {
     }
 });
 
+test("'key' adjusts properly when a key is removed", function() {
+    store.clear();
+    store.setItem("key 1", "1");
+    store.setItem("key 2", "2");
+    store.setItem("key 3", "3");
+
+    same(store.length, 3, "three keys stored");
+
+    var key = store.key(1);
+    store.removeItem(key);
+    same(store.length, 2, "two keys left");
+
+    ok(store.key(1) !== key, "key(1) changed");
+});
+
 test("'key' returns null when given an index >= the # of keys " +
      "(Firefox 3.5/Safari 4 incompatibility", function() {
     store.clear();

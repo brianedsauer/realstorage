@@ -5,6 +5,14 @@ var store = window.localStorage;
 // (At least) Safari 4 throws a fit if store.clear is passed directly
 module("W3C spec", {teardown: function() {store.clear();}});
 
+
+test("getItem returns null for non-existent keys", function() {
+    store.clear();
+
+    same(store.getItem("any ol' key"), null,
+        "null returned for non-existent key");
+});
+
 test("key for getItem converted to a string", function() {
     var key = 42;
     var value = "nothing";
@@ -26,7 +34,6 @@ test("value for setItem converted to a string (Firefox 3.5 incompatibility)",
         }
     });
 
-// XXX getItem returns null if key does not exist
 
 // XXX setItem (atomic) QUOTA_EXCEEDED_ERR returned if setting failed
 

@@ -163,12 +163,6 @@ test("'key' returns null when given an index >= the # of keys", function() {
 
 // XXX setItem (atomic) QUOTA_EXCEEDED_ERR returned if setting failed
 
-
-/* XXX key
-        - stable as long as keys do not change
-        - returns null when n > # of keys
-*/
-
 // XXX attrs are stored
 
 /* XXX Whenever the properties of a localStorage attribute's Storage object are

@@ -99,20 +99,6 @@ RealStorage.prototype = {
     }
 };
 
-/*realStorage.keysArray = function() {
-    var keys = [];
-
-    for (var x=0; x < realStorage.length; x+=1) {
-        keys.push(realStorage.key(x));
-    }
-
-    return keys;
-};*/
-
-
-/*realStorage.contains = function(key) {
-    return realStorage.getItem(key) !== null;
-};*/
 
 window.realStorage = new RealStorage(localStorage);
 

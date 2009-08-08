@@ -45,7 +45,12 @@ wrapStorage.prototype = {
             STANDARD
             Return the key for the entry at the specified index.
         */
-        return this.storageArea.key(index);
+        if (index >= this.length) {
+            return null;
+        }
+        else {
+            return this.storageArea.key(index);
+        }
     },
 
     getItem: function(key) {

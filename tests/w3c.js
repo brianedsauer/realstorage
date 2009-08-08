@@ -123,6 +123,24 @@ test("'key' works for all known keys", function() {
     same(key_count, 0, "all keys accounted for");
 });
 
+test("'key' stable as long as no keys added/removed", function() {
+    var keys = {key1: -1, key2: -1, key3: -1};
+
+    store.clear();
+    for (var key in keys) {
+        store.setItem(key, "42");
+    }
+
+    for (var x=0; x < store.length; x+=1) {
+        keys[store.key(x)] = x;
+    }
+
+    store.setItem("key2", "0");
+    for (key in keys) {
+        same(store.key(keys[key]), key, key + " has the same index");
+    }
+});
+
 
 // XXX setItem (atomic) QUOTA_EXCEEDED_ERR returned if setting failed
 

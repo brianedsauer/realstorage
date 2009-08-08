@@ -64,7 +64,7 @@ RealStorage.prototype = {
            The key is converted to a string before being used to query the
            store.
         */
-        return this.storageArea.getItem(key);
+        return this.storageArea.getItem(new String(key));
     },
 
     setItem: function(key, value) {
@@ -75,9 +75,7 @@ RealStorage.prototype = {
 
            Both key and value are converted to strings before being stored.
         */
-        var key_str = new String(key);
-        var value_str = new String(value);
-        this.storageArea.setItem(key_str, value_str);
+        this.storageArea.setItem(new String(key), new String(value));
     },
 
     removeItem: function(key) {
@@ -88,7 +86,7 @@ RealStorage.prototype = {
 
            The key is converted to a string before being used.
         */
-        this.storageArea.removeItem(key);
+        this.storageArea.removeItem(new String(key));
     },
 
     clear: function() {

@@ -14,35 +14,75 @@ if (!window.localStorage) {
     throw new Error("realStorage requires localStorage");
 }
 
-realStorage = function() {};
 
-// Object implementing the Storage interface
-var store = localStorage;
-
-/*
-   Delegates are used over setting the prototype for realStorage because the
-   typical implementation of localStorage is through a native object which
-   consistently messes up the lookup chain.
-*/
-
-/*
-   int
-   STANDARD
-   The number of entries in the store.
-*/
-// XXX Use a getter when possible
-realStorage.length = store.length;
-
-
-realStorage.key = function(index) {
+wrapStorage = function(storageArea) {
     /*
-        (index:int) -> String
-        STANDARD
-        Return the key for the entry at the specified index.
+        Constructor for wrapping a Storage interface.
     */
-    return store.key(index);
+    this.storageArea = storageArea;
 };
 
+
+wrapStorage.prototype = {
+
+    get length() {
+        /*
+           int
+           STANDARD
+           The number of entries in the store.
+        */
+        return this.storageArea.length;
+    },
+
+    key: function(index) {
+        /*
+            (index:int) -> String
+            STANDARD
+            Return the key for the entry at the specified index.
+        */
+        return this.storageArea.key(index);
+    },
+
+    getItem: function(key) {
+        /*
+           (key:String) -> String
+           STANDARD
+           Return the value stored under the specified key.
+        */
+        return this.storageArea.getItem(key);
+    },
+
+    setItem: function(key, value) {
+        /*
+           (key:String, value:String) -> null
+           STANDARD
+           Set the key to the given value.
+
+           Both key and value are converted to strings before being stored.
+        */
+        var key_str = new String(key);
+        var value_str = new String(value);
+        this.storageArea.setItem(key_str, value_str);
+    },
+
+    removeItem: function(key) {
+        /*
+           (key:String) -> null
+           STANDARD
+           Remove the key and its associated value.
+        */
+        this.storageArea.removeItem(key);
+    },
+
+    clear: function() {
+        /*
+           () -> null
+           STANDARD
+           Reset the store.
+        */
+        this.storageArea.clear();
+    }
+};
 
 /*realStorage.keysArray = function() {
     var keys = [];
@@ -59,52 +99,6 @@ realStorage.key = function(index) {
     return realStorage.getItem(key) !== null;
 };*/
 
-
-realStorage.getItem = function(key) {
-    /*
-       (key:String) -> String
-       STANDARD
-       Return the value stored under the specified key.
-    */
-    return store.getItem(key);
-};
-
-
-realStorage.setItem = function(key, value) {
-    /*
-       (key:String, value:String) -> null
-       STANDARD
-       Set the key to the given value.
-
-       Both key and value are converted to strings before being stored.
-    */
-    store.setItem(key, new String(value));
-    realStorage.length = store.length;
-};
-
-
-realStorage.removeItem = function(key) {
-    /*
-       (key:String) -> null
-       STANDARD
-       Remove the key and its associated value.
-    */
-    store.removeItem(key);
-    realStorage.length = store.length;
-};
-
-
-realStorage.clear = function() {
-    /*
-       () -> null
-       STANDARD
-       Reset the store.
-    */
-    store.clear();
-    realStorage.length = store.length;
-};
-
-
-window.realStorage = realStorage;
+window.realStorage = new wrapStorage(localStorage);
 
 })();

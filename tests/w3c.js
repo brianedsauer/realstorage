@@ -22,7 +22,7 @@ test("getItem returns null for non-existent keys", function() {
         "null returned for non-existent key");
 });
 
-test("key for getItem converted to a string", function() {
+test("key for setItem/getItem converted to a string", function() {
     var key = 42;
     var value = "nothing";
     store.setItem(key, "nothing");

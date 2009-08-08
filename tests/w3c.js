@@ -105,6 +105,24 @@ test("length", function() {
     same(store.length, 0, "length == 0 after another clear");
 });
 
+test("'key' works for all known keys", function() {
+    var keys = {key1: "42", key2: "-13", key3: "6"};
+    var key_count = 3;
+
+    store.clear();
+    for (var key in keys) {
+        store.setItem(key, keys[key]);
+    }
+
+    for (var x=0; x < store.length; x+=1) {
+        key = store.key(x);
+        ok(keys[key], "key returned by 'key' is valid");
+        key_count -= 1;
+    }
+
+    same(key_count, 0, "all keys accounted for");
+});
+
 
 // XXX setItem (atomic) QUOTA_EXCEEDED_ERR returned if setting failed
 

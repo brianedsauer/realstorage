@@ -15,7 +15,7 @@ if (!window.localStorage) {
 }
 
 
-wrapStorage = function(storageArea) {
+RealStorage = function(storageArea) {
     /*
         Constructor for wrapping a Storage interface.
     */
@@ -28,11 +28,11 @@ wrapStorage = function(storageArea) {
     implemented using native code which means there is no prototype to inherit
     from.
 */
-wrapStorage.prototype = {
+RealStorage.prototype = {
 
     get length() {
         /*
-           int
+           ulong
            STANDARD
            The number of entries in the store.
         */
@@ -41,9 +41,11 @@ wrapStorage.prototype = {
 
     key: function(index) {
         /*
-            (index:int) -> String
+            (index:ulong) -> String
             STANDARD
             Return the key for the entry at the specified index.
+
+            If index is >= the length of the store, then return null.
         */
         if (index >= this.length) {
             return null;
@@ -58,6 +60,9 @@ wrapStorage.prototype = {
            (key:String) -> String
            STANDARD
            Return the value stored under the specified key.
+
+           The key is converted to a string before being used to query the
+           store.
         */
         return this.storageArea.getItem(key);
     },
@@ -109,6 +114,6 @@ wrapStorage.prototype = {
     return realStorage.getItem(key) !== null;
 };*/
 
-window.realStorage = new wrapStorage(localStorage);
+window.realStorage = new RealStorage(localStorage);
 
 })();

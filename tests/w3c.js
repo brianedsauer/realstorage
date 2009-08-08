@@ -2,6 +2,7 @@
 
 var store = window.localStorage;
 
+// (At least) Safari 4 throws a fit if store.clear is passed directly
 module("W3C spec", {teardown: function() {store.clear();}});
 
 test("key for getItem converted to a string", function() {

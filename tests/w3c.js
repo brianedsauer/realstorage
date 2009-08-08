@@ -34,6 +34,16 @@ test("value for setItem converted to a string (Firefox 3.5 incompatibility)",
         }
     });
 
+test("removeItem removes items", function() {
+    var key = "some key";
+    store.setItem(key, "42");
+
+    ok(store.getItem(key), "key set");
+
+    store.removeItem(key);
+    same(store.getItem(key), null, "key removed");
+});
+
 test("removeItem a no-op if key does not exist", function() {
     store.clear();
     store.removeItem("some key that doesn't exist");
@@ -46,9 +56,6 @@ test("'clear' is a no-op if no keys exist", function() {
 
 
 // XXX setItem (atomic) QUOTA_EXCEEDED_ERR returned if setting failed
-
-
-// XXX clear (atomic) no-op if empty
 
 // XXX length
 

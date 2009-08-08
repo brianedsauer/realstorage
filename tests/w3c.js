@@ -58,15 +58,54 @@ test("removeItem a no-op if key does not exist", function() {
     store.removeItem("some key that doesn't exist");
 });
 
+test("'clear' removes all keys", function() {
+    var key1 = "key1";
+    var key2 = "key2";
+    var value = "42";
+
+    store.clear();
+
+    store.setItem(key1, value);
+    store.setItem(key2, value);
+
+    same(store.getItem(key1), value, "first key set");
+    same(store.getItem(key2), value, "second key set");
+
+    store.clear();
+    same(store.getItem(key1), null, "first key gone");
+    same(store.getItem(key2), null, "second key gone");
+});
+
 test("'clear' is a no-op if no keys exist", function() {
     store.clear();
     store.clear();
 });
 
+test("length", function() {
+    store.clear();
+
+    same(store.length, 0, "length == 0 after a clear");
+
+    var key = "key";
+    store.setItem(key, "42");
+    same(store.length, 1, "length++ after a set")
+
+    store.setItem(key, "-13");
+    same(store.length, 1,
+            "length unchanged when changing the value of an existing key");
+
+    store.removeItem(key);
+    same(store.length, 0, "length-- after a removal");
+
+    store.setItem(key, "42");
+    same(store.length, 1, "length++ after another set");
+    store.clear();
+    same(store.length, 0, "length == 0 after another clear");
+});
+
 
 // XXX setItem (atomic) QUOTA_EXCEEDED_ERR returned if setting failed
 
-// XXX length
 
 /* XXX key
         - stable as long as keys do not change

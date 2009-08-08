@@ -12,7 +12,7 @@ test("key for getItem converted to a string", function() {
     same(store.getItem(key.toString()), value, "key converted to string");
 });
 
-test("value for getItem converted to a string (Firefox 3.5 fails on null)",
+test("value for getItem converted to a string (Firefox 3.5 incompatibility)",
     function() {
         var values = [[42, "42"], [null, "null"], [undefined, "undefined"]];
         var key = "42";

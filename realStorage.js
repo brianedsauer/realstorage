@@ -85,6 +85,8 @@ RealStorage.prototype = {
            (key:String) -> null
            STANDARD
            Remove the key and its associated value.
+
+           The key is converted to a string before being used.
         */
         this.storageArea.removeItem(key);
     },

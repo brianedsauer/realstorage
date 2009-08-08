@@ -1,5 +1,7 @@
 (function() {
 
+var pesky_keys = [[42, "42"], [null, "null"], [undefined, "undefined"]];
+
 var store = window.realStorage;
 
 // (At least) Safari 4 throws a fit if store.clear is passed directly
@@ -23,20 +25,23 @@ test("getItem returns null for non-existent keys", function() {
 });
 
 test("key for getItem converted to a string", function() {
-    var key = 42;
-    var repr = "42";
-    var value = "nothing";
-    store.setItem(repr, value);
-    same(store.getItem(key), value, "key given as a non-string");
+
+    for (var x=0; x < pesky_keys.length; x+=1) {
+        var value = pesky_keys[x][0];
+        var repr = pesky_keys[x][1];
+
+        store.setItem(repr, repr);
+        same(store.getItem(value), repr, repr + " used as a key");
+    }
 });
 
 test("key/value for setItem converted to a string (Firefox 3.5 incompatibility)",
     function() {
-        var to_test = [[42, "42"], [null, "null"], [undefined, "undefined"]];
         var str = "42";
-        for (var x=0; x < to_test.length; x+=1) {
-            var value = to_test[x][0];
-            var repr = to_test[x][1];
+
+        for (var x=0; x < pesky_keys.length; x+=1) {
+            var value = pesky_keys[x][0];
+            var repr = pesky_keys[x][1];
             store.setItem(str, value);
             same(store.getItem(str), repr,
                  repr + " given as the value");
@@ -58,6 +63,17 @@ test("removeItem removes items", function() {
 test("removeItem a no-op if key does not exist", function() {
     store.clear();
     store.removeItem("some key that doesn't exist");
+});
+
+test("removeItem converts the key to a string", function() {
+    for (var x=0; x < pesky_keys.length; x+=1) {
+        var value = pesky_keys[x][0];
+        var repr = pesky_keys[x][1];
+
+        store.setItem(repr, repr);
+        store.removeItem(value);
+        same(store.getItem(repr), null, repr + " removed");
+    }
 });
 
 test("'clear' removes all keys", function() {
@@ -141,7 +157,8 @@ test("'key' stable as long as no keys added/removed", function() {
     }
 });
 
-test("'key' returns null when given an index >= the # of keys", function() {
+test("'key' returns null when given an index >= the # of keys " +
+     "(Firefox 3.5/Safari 4 incompatibility", function() {
     store.clear();
 
     // Specification says nothing about negative values

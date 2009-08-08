@@ -5,6 +5,15 @@ var store = window.localStorage;
 // (At least) Safari 4 throws a fit if store.clear is passed directly
 module("W3C spec", {teardown: function() {store.clear();}});
 
+test("setItem/getItem work for strings", function() {
+    var key = "key";
+    var value = "value";
+
+    store.setItem(key, value);
+
+    same(store.getItem(key), value, "value set is what is gotten");
+});
+
 
 test("getItem returns null for non-existent keys", function() {
     store.clear();

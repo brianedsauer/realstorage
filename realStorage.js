@@ -23,6 +23,11 @@ wrapStorage = function(storageArea) {
 };
 
 
+/*
+    Must use a delegate for every function as localStorage and friends are
+    implemented using native code which means there is no prototype to inherit
+    from.
+*/
 wrapStorage.prototype = {
 
     get length() {

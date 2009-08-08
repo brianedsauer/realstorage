@@ -39,7 +39,7 @@ test("key/value for setItem converted to a string (Firefox 3.5 incompatibility)"
             var repr = to_test[x][1];
             store.setItem(str, value);
             same(store.getItem(str), repr,
-                 repr + " returned as a string value");
+                 repr + " given as the value");
             store.setItem(value, str);
             same(store.getItem(repr), str, repr + " set as the key");
         }

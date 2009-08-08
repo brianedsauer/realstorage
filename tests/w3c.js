@@ -24,7 +24,7 @@ test("getItem returns null for non-existent keys", function() {
 
 test("key for getItem converted to a string", function() {
 
-    for (var x=0; x < pesky_keys.length; x+=1) {
+    for (var x in pesky_keys) {
         var value = pesky_keys[x][0];
         var repr = pesky_keys[x][1];
 
@@ -37,7 +37,7 @@ test("key/value for setItem converted to a string (Firefox 3.5 incompatibility)"
     function() {
         var str = "42";
 
-        for (var x=0; x < pesky_keys.length; x+=1) {
+        for (var x in pesky_keys) {
             var value = pesky_keys[x][0];
             var repr = pesky_keys[x][1];
             teststore.setItem(str, value);
@@ -64,7 +64,7 @@ test("removeItem a no-op if key does not exist", function() {
 });
 
 test("removeItem converts the key to a string", function() {
-    for (var x=0; x < pesky_keys.length; x+=1) {
+    for (var x in pesky_keys) {
         var value = pesky_keys[x][0];
         var repr = pesky_keys[x][1];
 
@@ -177,7 +177,7 @@ test("'key' returns null when given an index >= the # of keys " +
     // Specification says nothing about negative values
     var indices = [0, 1];
 
-    for (var x=0; x < indices.length; x+=1) {
+    for (var x in indices) {
         ok(indices[x] >= teststore.length,
             "index " + indices[x] + " >= the # of keys");
         try {

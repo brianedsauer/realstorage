@@ -141,6 +141,23 @@ test("'key' stable as long as no keys added/removed", function() {
     }
 });
 
+test("'key' returns null when given an index >= the # of keys", function() {
+    store.clear();
+
+    // Specification says nothing about negative values
+    var indices = [0, 1];
+
+    for (var x=0; x < indices.length; x+=1) {
+        try {
+            same(store.key(indices[x]), null,
+                    "null returned for index " + indices[x]);
+        }
+        catch (e) {
+            ok(false, "index " + indices[x] + " triggered an exception: " + e);
+        }
+    }
+});
+
 
 // XXX setItem (atomic) QUOTA_EXCEEDED_ERR returned if setting failed
 

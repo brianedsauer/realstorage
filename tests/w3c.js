@@ -148,6 +148,8 @@ test("'key' returns null when given an index >= the # of keys", function() {
     var indices = [0, 1];
 
     for (var x=0; x < indices.length; x+=1) {
+        ok(indices[x] >= store.length,
+            "index " + indices[x] + " >= the # of keys");
         try {
             same(store.key(indices[x]), null,
                     "null returned for index " + indices[x]);

@@ -31,15 +31,6 @@ RealStorage = function(storageArea) {
 */
 RealStorage.prototype = {
 
-    get length() {
-        /*
-           ulong
-           STANDARD
-           The number of entries in the store.
-        */
-        return this.storageArea.length;
-    },
-
     key: function(index) {
         /*
             (index:ulong) -> String
@@ -65,7 +56,7 @@ RealStorage.prototype = {
            The key is converted to a string before being used to query the
            store.
         */
-        return this.storageArea.getItem(new String(key));
+        return this.storageArea.getItem(String(key));
     },
 
     setItem: function(key, value) {
@@ -76,7 +67,7 @@ RealStorage.prototype = {
 
            Both key and value are converted to strings before being stored.
         */
-        this.storageArea.setItem(new String(key), new String(value));
+        this.storageArea.setItem(String(key), String(value));
     },
 
     removeItem: function(key) {
@@ -87,7 +78,7 @@ RealStorage.prototype = {
 
            The key is converted to a string before being used.
         */
-        this.storageArea.removeItem(new String(key));
+        this.storageArea.removeItem(String(key));
     },
 
     clear: function() {
@@ -99,6 +90,14 @@ RealStorage.prototype = {
         this.storageArea.clear();
     }
 };
+
+/*
+   ulong
+   STANDARD
+   The number of keys in the store.
+*/
+RealStorage.prototype.__defineGetter__("length", function() {
+        return this.storageArea.length;});
 
 
 window.realStorage = new RealStorage(localStorage);

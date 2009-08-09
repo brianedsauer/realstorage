@@ -1,3 +1,4 @@
+"use strict";
 /*
     realStorage -- provide a consistent API for localStorage.
     http://realstorage.googlecode.com/

@@ -96,6 +96,8 @@ RealStorage.prototype = {
    STANDARD
    The number of keys in the store.
 */
+// JSLint complains about ``get length()`` descriptor being invalid syntax.
+// ECMA5: Make into a proper descriptor.
 RealStorage.prototype.__defineGetter__("length", function() {
         return this.storageArea.length;});
 

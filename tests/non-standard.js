@@ -36,7 +36,8 @@ test("keysArray", function() {
     var found_keys = {};
     
     for (x in keys_array) {
-        found_keys[x] = x;
+        var key = keys_array[x];
+        found_keys[key] = key;
     }
 
     same(found_keys, keys, "all keys returned in array");

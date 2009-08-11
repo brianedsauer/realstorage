@@ -98,6 +98,21 @@ RealStorage.prototype = {
         */
         return this.getItem(key) !== null;
     },
+
+    keysArray: function() {
+        /*
+           () -> Array
+           NON-STANDARD
+           Return an array of all keys.
+        */
+        var keys = [];
+
+        for (var x=0; x < this.length; x+=1) {
+            keys.push(this.key(x));
+        }
+
+        return keys;
+    },
 };
 
 /*

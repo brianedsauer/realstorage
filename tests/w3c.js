@@ -5,7 +5,7 @@ var pesky_keys = [[42, "42"], [null, "null"], [undefined, "undefined"]];
 // (At least) Safari 4 throws a fit if teststore.clear is passed directly
 module("W3C spec", {teardown: function() {teststore.clear();}});
 
-test("setItem/getItem work for strings", function() {
+test("setItem() & getItem() work for strings", function() {
     var key = "key";
     var value = "value";
 
@@ -15,14 +15,14 @@ test("setItem/getItem work for strings", function() {
 });
 
 
-test("getItem returns null for non-existent keys", function() {
+test("getItem() returns null for non-existent keys", function() {
     teststore.clear();
 
     same(teststore.getItem("any ol' key"), null,
         "null returned for non-existent key");
 });
 
-test("key for getItem converted to a string", function() {
+test("key for getItem() converted to a string", function() {
 
     for (var x in pesky_keys) {
         var value = pesky_keys[x][0];
@@ -33,8 +33,8 @@ test("key for getItem converted to a string", function() {
     }
 });
 
-test("key/value for setItem converted to a string (Firefox 3.5 incompatibility)",
-    function() {
+test("key/value for setItem() converted to a string "+ 
+     "(Firefox 3.5 incompatibility)", function() {
         var str = "42";
 
         for (var x in pesky_keys) {
@@ -48,7 +48,7 @@ test("key/value for setItem converted to a string (Firefox 3.5 incompatibility)"
         }
     });
 
-test("removeItem removes items", function() {
+test("removeItem() removes items", function() {
     var key = "some key";
     teststore.setItem(key, "42");
 
@@ -58,12 +58,12 @@ test("removeItem removes items", function() {
     same(teststore.getItem(key), null, "key removed");
 });
 
-test("removeItem a no-op if key does not exist", function() {
+test("removeItem() a no-op if key does not exist", function() {
     teststore.clear();
     teststore.removeItem("some key that doesn't exist");
 });
 
-test("removeItem converts the key to a string", function() {
+test("removeItem() converts the key to a string", function() {
     for (var x in pesky_keys) {
         var value = pesky_keys[x][0];
         var repr = pesky_keys[x][1];
@@ -74,7 +74,7 @@ test("removeItem converts the key to a string", function() {
     }
 });
 
-test("'clear' removes all keys", function() {
+test("clear() removes all keys", function() {
     var key1 = "key1";
     var key2 = "key2";
     var value = "42";
@@ -92,7 +92,7 @@ test("'clear' removes all keys", function() {
     same(teststore.getItem(key2), null, "second key gone");
 });
 
-test("'clear' is a no-op if no keys exist", function() {
+test("clear() is a no-op if no keys exist", function() {
     teststore.clear();
     teststore.clear();
 });
@@ -119,7 +119,7 @@ test("length", function() {
     same(teststore.length, 0, "length == 0 after another clear");
 });
 
-test("'key' works for all known keys", function() {
+test("key() works for all known keys", function() {
     var keys = {key1: "42", key2: "-13", key3: "6"};
     var key_count = 3;
 
@@ -130,14 +130,14 @@ test("'key' works for all known keys", function() {
 
     for (var x=0; x < teststore.length; x+=1) {
         key = teststore.key(x);
-        ok(keys[key], "key returned by 'key' is valid");
+        ok(keys[key], "key returned by key() is valid");
         key_count -= 1;
     }
 
     same(key_count, 0, "all keys accounted for");
 });
 
-test("'key' stable as long as no keys added/removed", function() {
+test("key() is stable as long as no keys added/removed", function() {
     var keys = {key1: -1, key2: -1, key3: -1};
 
     teststore.clear();
@@ -155,7 +155,7 @@ test("'key' stable as long as no keys added/removed", function() {
     }
 });
 
-test("'key' adjusts properly when a key is removed", function() {
+test("key() adjusts properly when a key is removed", function() {
     teststore.clear();
     teststore.setItem("key 1", "1");
     teststore.setItem("key 2", "2");
@@ -170,7 +170,7 @@ test("'key' adjusts properly when a key is removed", function() {
     ok(teststore.key(1) !== key, "key(1) changed");
 });
 
-test("'key' returns null when given an index >= the # of keys " +
+test("key() returns null when given an index >= the # of keys " +
      "(Firefox 3.5/Safari 4 incompatibility", function() {
     teststore.clear();
 

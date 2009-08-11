@@ -88,7 +88,16 @@ RealStorage.prototype = {
            Reset the store.
         */
         this.storageArea.clear();
-    }
+    },
+
+    contains: function(key) {
+        /*
+           (key:String) -> Boolean
+           NON-STANDARD
+           Return true/false based on whether the key exists in the store.
+        */
+        return this.getItem(key) !== null;
+    },
 };
 
 /*

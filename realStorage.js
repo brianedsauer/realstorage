@@ -112,7 +112,7 @@ RealStorage.prototype = {
         }
 
         return keys;
-    },
+    }
 };
 
 /*

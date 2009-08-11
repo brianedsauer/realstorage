@@ -4,7 +4,7 @@ var reset = function() {realStorage.clear()};
 
 module("non-standard API", {setup: reset, teardown: reset});
 
-test("'contains'", function() {
+test("contains()", function() {
     var key = "key";
 
     realStorage.setItem(key, "42");
@@ -12,7 +12,7 @@ test("'contains'", function() {
     ok(!realStorage.contains(key + "bad"), "false for non-existent key");
 });
 
-test("'contains' returns true for a value of null", function() {
+test("contains() returns true for a value of null", function() {
     var key = "key";
 
     realStorage.setItem(key, null);
@@ -21,7 +21,7 @@ test("'contains' returns true for a value of null", function() {
 });
 
 
-test("keysArray", function() {
+test("keysArray()", function() {
     var keys_array = realStorage.keysArray();
 
     same(keys_array, [], "empty store returns an empty array");

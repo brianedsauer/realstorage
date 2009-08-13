@@ -25,11 +25,13 @@ test("getItem() returns null for non-existent keys", function() {
 test("key for getItem() converted to a string", function() {
 
     for (var x in pesky_keys) {
-        var value = pesky_keys[x][0];
-        var repr = pesky_keys[x][1];
+        if (pesky_keys.hasOwnProperty(x)) {
+            var value = pesky_keys[x][0];
+            var repr = pesky_keys[x][1];
 
-        teststore.setItem(repr, repr);
-        same(teststore.getItem(value), repr, repr + " used as a key");
+            teststore.setItem(repr, repr);
+            same(teststore.getItem(value), repr, repr + " used as a key");
+        }
     }
 });
 
@@ -38,13 +40,15 @@ test("key/value for setItem() converted to a string "+
         var str = "42";
 
         for (var x in pesky_keys) {
-            var value = pesky_keys[x][0];
-            var repr = pesky_keys[x][1];
-            teststore.setItem(str, value);
-            same(teststore.getItem(str), repr,
-                 repr + " given as the value");
-            teststore.setItem(value, str);
-            same(teststore.getItem(repr), str, repr + " set as the key");
+            if (pesky_keys.hasOwnProperty(x)) {
+                var value = pesky_keys[x][0];
+                var repr = pesky_keys[x][1];
+                teststore.setItem(str, value);
+                same(teststore.getItem(str), repr,
+                     repr + " given as the value");
+                teststore.setItem(value, str);
+                same(teststore.getItem(repr), str, repr + " set as the key");
+            }
         }
     });
 
@@ -65,12 +69,14 @@ test("removeItem() a no-op if key does not exist", function() {
 
 test("removeItem() converts the key to a string", function() {
     for (var x in pesky_keys) {
-        var value = pesky_keys[x][0];
-        var repr = pesky_keys[x][1];
+        if (pesky_keys.hasOwnProperty(x)) {
+            var value = pesky_keys[x][0];
+            var repr = pesky_keys[x][1];
 
-        teststore.setItem(repr, repr);
-        teststore.removeItem(value);
-        same(teststore.getItem(repr), null, repr + " removed");
+            teststore.setItem(repr, repr);
+            teststore.removeItem(value);
+            same(teststore.getItem(repr), null, repr + " removed");
+        }
     }
 });
 
@@ -125,7 +131,9 @@ test("key() works for all known keys", function() {
 
     teststore.clear();
     for (var key in keys) {
-        teststore.setItem(key, keys[key]);
+        if (keys.hasOwnProperty(key)) {
+            teststore.setItem(key, keys[key]);
+        }
     }
 
     for (var x=0; x < teststore.length; x+=1) {
@@ -142,7 +150,9 @@ test("key() is stable as long as no keys added/removed", function() {
 
     teststore.clear();
     for (var key in keys) {
-        teststore.setItem(key, "42");
+        if (keys.hasOwnProperty(key)) {
+            teststore.setItem(key, "42");
+        }
     }
 
     for (var x=0; x < teststore.length; x+=1) {
@@ -151,7 +161,9 @@ test("key() is stable as long as no keys added/removed", function() {
 
     teststore.setItem("key2", "0");
     for (key in keys) {
-        same(teststore.key(keys[key]), key, key + " has the same index");
+        if (keys.hasOwnProperty(key)) {
+            same(teststore.key(keys[key]), key, key + " has the same index");
+        }
     }
 });
 
@@ -177,7 +189,7 @@ test("key() returns null when given an index >= the # of keys " +
     // Specification says nothing about negative values
     var indices = [0, 1];
 
-    for (var x in indices) {
+    for (var x=0; x < indices.length; x+=1) {
         ok(indices[x] >= teststore.length,
             "index " + indices[x] + " >= the # of keys");
         try {

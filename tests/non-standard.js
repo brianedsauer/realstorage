@@ -29,13 +29,15 @@ test("keysArray()", function() {
     var keys = {"a": "a", "b": "b", "c": "c"};
 
     for (var x in keys) {
-        realStorage.setItem(x, x);
+        if (keys.hasOwnProperty(x)) {
+            realStorage.setItem(x, x);
+        }
     }
 
     var keys_array = realStorage.keysArray();
     var found_keys = {};
     
-    for (x in keys_array) {
+    for (x=0; x < keys_array.length; x+=1) {
         var key = keys_array[x];
         found_keys[key] = key;
     }

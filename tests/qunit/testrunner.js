@@ -1,6 +1,6 @@
 /*
  * QUnit - jQuery unit testrunner
- * 
+ *
  * http://docs.jquery.com/QUnit
  *
  * Copyright (c) 2008 John Resig, Jörn Zaefferer
@@ -26,7 +26,7 @@ var equiv = function () {
     function hoozit(o) {
         if (o.constructor === String) {
             return "string";
-            
+
         } else if (o.constructor === Boolean) {
             return "boolean";
 
@@ -48,7 +48,7 @@ var equiv = function () {
         // consider: typeof [] === object
         } else if (o instanceof Array) {
             return "array";
-        
+
         // consider: typeof new Date() === object
         } else if (o instanceof Date) {
             return "date";
@@ -81,7 +81,7 @@ var equiv = function () {
             }
         }
     }
-    
+
     var callbacks = function () {
 
         // for string, boolean, number and null
@@ -328,7 +328,7 @@ function validTest( name ) {
 	while( i-- ){
 		var filter = config.filters[i],
 			not = filter.charAt(0) == '!';
-		if( not ) 
+		if( not )
 			filter = filter.slice(1);
 		if( name.indexOf(filter) != -1 )
 			return !not;
@@ -724,7 +724,7 @@ function triggerEvent( elem, type, event ) {
 			this.parsers[name] = parser;
 		},
 		// The next 3 are exposed so you can use them
-		quote:quote, 
+		quote:quote,
 		literal:literal,
 		join:join,
 		//

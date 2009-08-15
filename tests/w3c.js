@@ -35,7 +35,7 @@ test("key for getItem() converted to a string", function() {
     }
 });
 
-test("key/value for setItem() converted to a string "+ 
+test("key/value for setItem() converted to a string "+
      "(Firefox 3.5 incompatibility)", function() {
         var str = "42";
 

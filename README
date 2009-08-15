@@ -1,0 +1,14 @@
+realStorage_
+=============
+A browser compatibility library for localStorage_ along with some convenient
+additions added beyond the `W3C Web Storage`_ standard.
+
+.. _realStorage: http://realstorage.googlecode.com/
+.. _W3C Web Storage: http://dev.w3.org/html5/webstorage/
+.. _localStorage: http://dev.w3.org/html5/webstorage/#the-localstorage-attribute
+
+
+Support Browsers
+-----------------
+* Firefox 3.5
+* Safari 4.0

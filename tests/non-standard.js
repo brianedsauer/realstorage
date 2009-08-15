@@ -65,6 +65,38 @@ if (window.JSON !== undefined) {
         same(realStorage.getJSONObject(key), String(value),
                 "in went a string, out came a string");
     });
+
+    test("optional arguments to setJSONObject()", function() {
+        var key = "key";
+        var value = {yes: true, no: false};
+        var whitelist = ["yes"];
+        var expect = {yes: true};
+
+        realStorage.setJSONObject(key, value, whitelist);
+        same(realStorage.getJSONObject(key), expect,
+                "second argument passed through to JSON.stringify()");
+
+        /* Hard to test the third argument as Safari 4 and Firefox 3.5 disagree
+           on its usage. */
+    });
+
+    test("optional arguments to getJSONObject()", function() {
+        var doubleValue = function(key, value) {
+            if ((typeof value) === (typeof 42)) {
+                return value * 2;
+            }
+            else {
+                return value;
+            }
+        };
+        var key = "key";
+        var value = {1: 1, 2: 2, 3: 3};
+        var expect = {1: 2, 2: 4, 3: 6};
+
+        realStorage.setJSONObject(key, value);
+        same(realStorage.getJSONObject(key, doubleValue), expect,
+                "second argument passed through to JSON.parse()");
+    });
 }
 
 })();

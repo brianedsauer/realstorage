@@ -114,23 +114,34 @@ RealStorage.prototype = {
         return keys;
     },
 
-    getJSONObject: function(key, translate) {
+    getJSONObject: function(key) {
         /*
-           (key:String, [translate:function]) -> Object
+           (key:String, [*args]) -> Object
            NON-STANDARD
            Return a parsed JSON object stored under the specified key.
         */
-        return JSON.parse(this.getItem(key), translate);
+        var args = [this.getItem(key)];
+
+        for (var x=1; x < arguments.length; x+=1) {
+            args.push(arguments[x]);
+        }
+
+        return JSON.parse.apply(null, args);
     },
 
-    setJSONObject: function(key, value, translate, spacing) {
+    setJSONObject: function(key, value) {
         /*
-           (key:String, value: Object,
-             [translate:Array|function, spacing:String|number]) -> null
+           (key:String, value: Object, [*args]) -> null
            NON-STANDARD
            Store a JSON-compatible object.
         */
-        this.setItem(key, JSON.stringify(value, translate, spacing));
+        var args = [value];
+
+        for (var x=2; x < arguments.length; x+=1) {
+            args.push(arguments[x]);
+        };
+
+        this.setItem(key, JSON.stringify.apply(null, args));
     }
 };
 

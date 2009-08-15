@@ -8,6 +8,11 @@ additions added beyond the `W3C Web Storage`_ standard.
 .. _localStorage: http://dev.w3.org/html5/webstorage/#the-localstorage-attribute
 
 
+API
+----
+See http://code.google.com/p/realstorage/wiki/API .
+
+
 Support Browsers
 -----------------
 * Firefox 3.5

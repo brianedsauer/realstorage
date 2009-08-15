@@ -3,7 +3,7 @@
 var pesky_keys = [[42, "42"], [null, "null"], [undefined, "undefined"]];
 
 // (At least) Safari 4 throws a fit if teststore.clear is passed directly
-module("W3C spec", {teardown: function() {teststore.clear();}});
+module("W3C spec", {setup: function() {teststore.clear();}});
 
 test("setItem() & getItem() work for strings", function() {
     var key = "key";

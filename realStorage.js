@@ -31,10 +31,12 @@ RealStorage = function(storageArea) {
 */
 RealStorage.prototype = {
 
+    /* STANDARD */
+
     key: function(index) {
         /*
             (index:ulong) -> String
-            STANDARD
+
             Return the key for the entry at the specified index.
 
             If index is >= the length of the store, then return null.
@@ -50,7 +52,7 @@ RealStorage.prototype = {
     getItem: function(key) {
         /*
            (key:String) -> String
-           STANDARD
+
            Return the value stored under the specified key.
 
            The key is converted to a string before being used to query the
@@ -62,7 +64,7 @@ RealStorage.prototype = {
     setItem: function(key, value) {
         /*
            (key:String, value:String) -> null
-           STANDARD
+
            Set the key to the given value.
 
            Both key and value are converted to strings before being stored.
@@ -73,7 +75,7 @@ RealStorage.prototype = {
     removeItem: function(key) {
         /*
            (key:String) -> null
-           STANDARD
+
            Remove the key and its associated value.
 
            The key is converted to a string before being used.
@@ -84,16 +86,18 @@ RealStorage.prototype = {
     clear: function() {
         /*
            () -> null
-           STANDARD
+
            Reset the store.
         */
         this.storageArea.clear();
     },
 
+    /* NON-STANDARD */
+
     contains: function(key) {
         /*
            (key:String) -> Boolean
-           NON-STANDARD
+
            Return true/false based on whether the key exists in the store.
         */
         return this.getItem(key) !== null;
@@ -102,7 +106,7 @@ RealStorage.prototype = {
     keysArray: function() {
         /*
            () -> Array
-           NON-STANDARD
+
            Return an array of all keys.
         */
         var keys = [];
@@ -117,7 +121,7 @@ RealStorage.prototype = {
     getJSONObject: function(key) {
         /*
            (key:String, [*args]) -> Object
-           NON-STANDARD
+
            Return a parsed JSON object stored under the specified key.
         */
         var args = [this.getItem(key)];
@@ -132,14 +136,14 @@ RealStorage.prototype = {
     setJSONObject: function(key, value) {
         /*
            (key:String, value: Object, [*args]) -> null
-           NON-STANDARD
+
            Store a JSON-compatible object.
         */
         var args = [value];
 
         for (var x=2; x < arguments.length; x+=1) {
             args.push(arguments[x]);
-        };
+        }
 
         this.setItem(key, JSON.stringify.apply(null, args));
     }

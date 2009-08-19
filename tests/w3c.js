@@ -1,5 +1,9 @@
 (function() {
 
+if (!window.teststore) {
+    var teststore = realStorage;
+}
+
 var pesky_keys = [[42, "42"], [null, "null"], [undefined, "undefined"]];
 
 // (At least) Safari 4 throws a fit if teststore.clear is passed directly

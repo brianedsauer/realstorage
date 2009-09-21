@@ -15,151 +15,140 @@ if (!window.localStorage) {
     throw new Error("realStorage requires localStorage");
 }
 
+function wrapStorageArea(storageArea) {
 
-RealStorage = function(storageArea) {
+    var wrapper = {
+
+        key: function key(index) {
+            /*
+                (index:ulong) -> String
+
+                Return the key for the entry at the specified index.
+
+                If index is >= the length of the store, then return null.
+            */
+            if (index >= this.length) {
+                return null;
+            }
+            else {
+                return storageArea.key(index);
+            }
+        },
+
+        getItem: function getItem(key) {
+            /*
+               (key:String) -> String
+
+               Return the value stored under the specified key.
+
+               The key is converted to a string before being used to query the
+               store.
+            */
+            return storageArea.getItem(String(key));
+        },
+
+        setItem: function setItem(key, value) {
+            /*
+               (key:String, value:String) -> null
+
+               Set the key to the given value.
+
+               Both key and value are converted to strings before being stored.
+            */
+            storageArea.setItem(String(key), String(value));
+        },
+
+        removeItem: function removeItem(key) {
+            /*
+               (key:String) -> null
+
+               Remove the key and its associated value.
+
+               The key is converted to a string before being used.
+            */
+            storageArea.removeItem(String(key));
+        },
+
+        clear: function clear() {
+            /*
+               () -> null
+
+               Reset the store.
+            */
+            storageArea.clear();
+        },
+
+        /* NON-STANDARD */
+
+        contains: function contains(key) {
+            /*
+               (key:String) -> Boolean
+
+               Return true/false based on whether the key exists in the store.
+            */
+            return wrapper.getItem(key) !== null;
+        },
+
+        keysArray: function keysArray() {
+            /*
+               () -> Array
+
+               Return an array of all keys.
+            */
+            var keys = [];
+
+            for (var x=0; x < wrapper.length; x+=1) {
+                keys.push(wrapper.key(x));
+            }
+
+            return keys;
+        },
+
+        getJSONObject: function getJSONObject(key) {
+            /*
+               (key:String, [*args]) -> Object
+
+               Return a parsed JSON object stored under the specified key.
+            */
+            var args = [wrapper.getItem(key)];
+
+            for (var x=1; x < arguments.length; x+=1) {
+                args.push(arguments[x]);
+            }
+
+            return JSON.parse.apply(null, args);
+        },
+
+        setJSONObject: function setJSONObject(key, value) {
+            /*
+               (key:String, value: Object, [*args]) -> null
+
+               Store a JSON-compatible object.
+            */
+            var args = [value];
+
+            for (var x=2; x < arguments.length; x+=1) {
+                args.push(arguments[x]);
+            }
+
+            wrapper.setItem(key, JSON.stringify.apply(null, args));
+        }
+    };
+
     /*
-        Constructor for wrapping a Storage interface.
+       ulong
+       STANDARD
+       The number of keys in the store.
     */
-    this.storageArea = storageArea;
-};
+    // JSLint complains about ``get length()`` descriptor being invalid syntax.
+    // ECMA5: Make into a proper descriptor.
+    wrapper.__defineGetter__("length", function() {
+            return storageArea.length;});
+
+    return wrapper;
+}
 
 
-/*
-    Must use a delegate for every function as localStorage and friends are
-    implemented using native code which means there is no prototype to inherit
-    from.
-*/
-RealStorage.prototype = {
-
-    /* STANDARD */
-
-    key: function(index) {
-        /*
-            (index:ulong) -> String
-
-            Return the key for the entry at the specified index.
-
-            If index is >= the length of the store, then return null.
-        */
-        if (index >= this.length) {
-            return null;
-        }
-        else {
-            return this.storageArea.key(index);
-        }
-    },
-
-    getItem: function(key) {
-        /*
-           (key:String) -> String
-
-           Return the value stored under the specified key.
-
-           The key is converted to a string before being used to query the
-           store.
-        */
-        return this.storageArea.getItem(String(key));
-    },
-
-    setItem: function(key, value) {
-        /*
-           (key:String, value:String) -> null
-
-           Set the key to the given value.
-
-           Both key and value are converted to strings before being stored.
-        */
-        this.storageArea.setItem(String(key), String(value));
-    },
-
-    removeItem: function(key) {
-        /*
-           (key:String) -> null
-
-           Remove the key and its associated value.
-
-           The key is converted to a string before being used.
-        */
-        this.storageArea.removeItem(String(key));
-    },
-
-    clear: function() {
-        /*
-           () -> null
-
-           Reset the store.
-        */
-        this.storageArea.clear();
-    },
-
-    /* NON-STANDARD */
-
-    contains: function(key) {
-        /*
-           (key:String) -> Boolean
-
-           Return true/false based on whether the key exists in the store.
-        */
-        return this.getItem(key) !== null;
-    },
-
-    keysArray: function() {
-        /*
-           () -> Array
-
-           Return an array of all keys.
-        */
-        var keys = [];
-
-        for (var x=0; x < this.length; x+=1) {
-            keys.push(this.key(x));
-        }
-
-        return keys;
-    },
-
-    getJSONObject: function(key) {
-        /*
-           (key:String, [*args]) -> Object
-
-           Return a parsed JSON object stored under the specified key.
-        */
-        var args = [this.getItem(key)];
-
-        for (var x=1; x < arguments.length; x+=1) {
-            args.push(arguments[x]);
-        }
-
-        return JSON.parse.apply(null, args);
-    },
-
-    setJSONObject: function(key, value) {
-        /*
-           (key:String, value: Object, [*args]) -> null
-
-           Store a JSON-compatible object.
-        */
-        var args = [value];
-
-        for (var x=2; x < arguments.length; x+=1) {
-            args.push(arguments[x]);
-        }
-
-        this.setItem(key, JSON.stringify.apply(null, args));
-    }
-};
-
-/*
-   ulong
-   STANDARD
-   The number of keys in the store.
-*/
-// JSLint complains about ``get length()`` descriptor being invalid syntax.
-// ECMA5: Make into a proper descriptor.
-RealStorage.prototype.__defineGetter__("length", function() {
-        return this.storageArea.length;});
-
-
-window.realStorage = new RealStorage(localStorage);
+window.realStorage = wrapStorageArea(window.localStorage);
 
 })();

@@ -27,8 +27,14 @@
                     break;
                 }
             }
-        window.teststore = window[teststore];
-        if (!window.teststore) {
+        try {
+            window.teststore = window[teststore];
+        }
+        catch (e) {
+            alert("when setting Web Storage implementation: " + e);
+            throw e;
+        }
+        if (!window.teststore === undefined) {
             alert("test Storage instance " + teststore + " not found");
         }
         })();

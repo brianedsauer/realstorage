@@ -1,8 +1,6 @@
 (function() {
 
-if (!window.teststore) {
-    var teststore = realStorage;
-}
+var teststore = window.teststore || realStorage;
 
 var pesky_keys = [[42, "42"], [null, "null"], [undefined, "undefined"]];
 

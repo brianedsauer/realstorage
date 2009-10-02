@@ -131,7 +131,7 @@ function wrapStorageArea(storageArea) {
                 args.push(arguments[x]);
             }
 
-            wrapper.setItem(key, JSON.stringify.apply(null, args));
+            storageArea.setItem(String(key), JSON.stringify.apply(null, args));
         }
     };
 

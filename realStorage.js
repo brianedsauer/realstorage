@@ -98,7 +98,7 @@ function wrapStorageArea(storageArea) {
             var keys = [];
 
             for (var x=0; x < wrapper.length; x+=1) {
-                keys.push(wrapper.key(x));
+                keys.push(localStorage.key(x));
             }
 
             return keys;

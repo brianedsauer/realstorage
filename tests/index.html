@@ -10,28 +10,38 @@
         <script type="text/javascript">
             (function() {
 
-            function createTest(details, testFxn, name, storageArea) {
-                test([name, "--", details].join(' '), function() {
-                    testFxn(storageArea);
-                });
+             if (window.realStorage === undefined) {
+             if (window.localStorage === undefined &&
+                 window.sessionStorage === undefined)
+                    alert("realStorage does not support your browser");
+                else
+                    alert("realStorage has a critical issue on your browser");
+                function storageTest() {};
             }
-
-            var areas = [];
-            var area_names = ["local", "session"];
-            for (var x=0; x < area_names.length; x+=1) {
-                var name = area_names[x];
-
-                if (realStorage[name] !== undefined) {
-                    areas.push([name, realStorage[name]]);
+            else {
+                function createTest(details, testFxn, name, storageArea) {
+                    test([name, "--", details].join(' '), function() {
+                        testFxn(storageArea);
+                    });
                 }
-            }
 
-            function storageTest(details, testFxn) {
-                for (var x=0; x < areas.length; x+=1) {
-                    var name = areas[x][0];
-                    var area = areas[x][1];
+                var areas = [];
+                var area_names = ["local", "session"];
+                for (var x=0; x < area_names.length; x+=1) {
+                    var name = area_names[x];
 
-                    createTest(details, testFxn, name, area);
+                    if (realStorage[name] !== undefined) {
+                        areas.push([name, realStorage[name]]);
+                    }
+                }
+
+                function storageTest(details, testFxn) {
+                    for (var x=0; x < areas.length; x+=1) {
+                        var name = areas[x][0];
+                        var area = areas[x][1];
+
+                        createTest(details, testFxn, name, area);
+                    }
                 }
             }
 

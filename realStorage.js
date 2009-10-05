@@ -100,7 +100,7 @@ function wrapStorageArea(storageArea) {
             return keys_array;
         },
 
-        getJSONObject: function getJSONObject(key) {
+        getObject: function getObject(key) {
             /*
                (key:String, [*args]) -> Object
 
@@ -115,7 +115,7 @@ function wrapStorageArea(storageArea) {
             return JSON.parse.apply(null, args);
         },
 
-        setJSONObject: function setJSONObject(key, value) {
+        setObject: function setObject(key, value) {
             /*
                (key:String, value: Object, [*args]) -> null
 

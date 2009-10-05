@@ -45,44 +45,44 @@ storageTest("keysArray()", function(store) {
 });
 
 if (window.JSON !== undefined) {
-    storageTest("getJSONObject()/setJSONObject()", function(store) {
+    storageTest("getObject()/setObject()", function(store) {
         var key = "some key";
         var value = {answer: 42};
 
-        store.setJSONObject(key, value);
-        same(store.getJSONObject(key), value,
+        store.setObject(key, value);
+        same(store.getObject(key), value,
                 "value returned as an Object");
     });
 
-    storageTest("getJSONObject()/setJSONObject() do not coerce",
+    storageTest("getObject()/setObject() do not coerce",
             function(store) {
         var key = "some key";
         var value = 42;
 
-        store.setJSONObject(key, value);
-        same(store.getJSONObject(key), value,
+        store.setObject(key, value);
+        same(store.getObject(key), value,
                 "in went a number, out came a number");
 
-        store.setJSONObject(key, String(value));
-        same(store.getJSONObject(key), String(value),
+        store.setObject(key, String(value));
+        same(store.getObject(key), String(value),
                 "in went a string, out came a string");
     });
 
-    storageTest("optional arguments to setJSONObject()", function(store) {
+    storageTest("optional arguments to setObject()", function(store) {
         var key = "some key";
         var value = {yes: true, no: false};
         var whitelist = ["yes"];
         var expect = {yes: true};
 
-        store.setJSONObject(key, value, whitelist);
-        same(store.getJSONObject(key), expect,
+        store.setObject(key, value, whitelist);
+        same(store.getObject(key), expect,
                 "second argument passed through to JSON.stringify()");
 
         /* Hard to test the third argument as Safari 4 and Firefox 3.5 disagree
            on its usage. */
     });
 
-    storageTest("optional arguments to getJSONObject()", function(store) {
+    storageTest("optional arguments to getObject()", function(store) {
         var doubleValue = function(key, value) {
             if ((typeof value) === (typeof 42)) {
                 return value * 2;
@@ -95,8 +95,8 @@ if (window.JSON !== undefined) {
         var value = {1: 1, 2: 2, 3: 3};
         var expect = {1: 2, 2: 4, 3: 6};
 
-        store.setJSONObject(key, value);
-        same(store.getJSONObject(key, doubleValue), expect,
+        store.setObject(key, value);
+        same(store.getObject(key, doubleValue), expect,
                 "second argument passed through to JSON.parse()");
     });
 }

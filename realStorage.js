@@ -91,13 +91,13 @@ function wrapStorageArea(storageArea) {
 
                Return an array of all keys.
             */
-            var keys = [];
+            var keys_array = [];
 
             for (var x=0; x < wrapper.length; x+=1) {
-                keys.push(localStorage.key(x));
+                keys_array.push(wrapper.key(x));
             }
 
-            return keys;
+            return keys_array;
         },
 
         getJSONObject: function getJSONObject(key) {
@@ -146,5 +146,7 @@ function wrapStorageArea(storageArea) {
 
 
 window.realStorage = wrapStorageArea(window.localStorage);
+window.realStorage.local = window.realStorage;
+window.realStorage.session = wrapStorageArea(window.sessionStorage);
 
 })();

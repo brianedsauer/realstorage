@@ -37,10 +37,11 @@ function wrapStorageArea(storageArea) {
 
                Return the value stored under the specified key.
 
-               The key is converted to a string before being used to query the
+               The key is coerced to a string before being used to query the
                store.
             */
-            return storageArea.getItem(String(key));
+            // Firefox 3.5 does not coerce null
+            return storageArea.getItem(key !== null ? key : "null");
         },
 
         setItem: function setItem(key, value) {
@@ -51,7 +52,9 @@ function wrapStorageArea(storageArea) {
 
                Both key and value are converted to strings before being stored.
             */
-            storageArea.setItem(String(key), String(value));
+            // Firefox 3.5 does not coerce null
+            storageArea.setItem(key !== null ? key : "null",
+                                value !== null ? value : "null");
         },
 
         removeItem: function removeItem(key) {
@@ -62,7 +65,8 @@ function wrapStorageArea(storageArea) {
 
                The key is converted to a string before being used.
             */
-            storageArea.removeItem(String(key));
+            // Firefox 3.5 does not coerce null
+            storageArea.removeItem(key !== null ? key : "null");
         },
 
         clear: function clear() {
@@ -82,7 +86,8 @@ function wrapStorageArea(storageArea) {
 
                Return true/false based on whether the key exists in the store.
             */
-            return wrapper.getItem(key) !== null;
+            // Firefox 3.5 does not coerce null
+            return storageArea.getItem(key !== null ? key : "null") !== null;
         },
 
         keysArray: function keysArray() {
@@ -93,8 +98,8 @@ function wrapStorageArea(storageArea) {
             */
             var keys_array = [];
 
-            for (var x=0; x < wrapper.length; x+=1) {
-                keys_array.push(wrapper.key(x));
+            for (var x=0; x < storageArea.length; x+=1) {
+                keys_array.push(storageArea.key(x));
             }
 
             return keys_array;
@@ -106,7 +111,7 @@ function wrapStorageArea(storageArea) {
 
                Return a parsed JSON object stored under the specified key.
             */
-            var args = [wrapper.getItem(key)];
+            var args = [storageArea.getItem(key !== null ? key : "null")];
 
             for (var x=1; x < arguments.length; x+=1) {
                 args.push(arguments[x]);
@@ -127,7 +132,8 @@ function wrapStorageArea(storageArea) {
                 args.push(arguments[x]);
             }
 
-            storageArea.setItem(String(key), JSON.stringify.apply(null, args));
+            storageArea.setItem(key !== null ? key : "null",
+                                JSON.stringify.apply(null, args));
         }
     };
 

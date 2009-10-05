@@ -10,9 +10,8 @@
         <script type="text/javascript">
             (function() {
 
-             if (window.realStorage === undefined) {
-             if (window.localStorage === undefined &&
-                 window.sessionStorage === undefined)
+             if (!window.realStorage) {
+             if (!window.localStorage)
                     alert("realStorage does not support your browser");
                 else
                     alert("realStorage has a critical issue on your browser");

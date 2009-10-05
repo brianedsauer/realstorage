@@ -6,7 +6,7 @@
 (function() {
 
 // No need to re-initialize or bother if localStorage doesn't exist
-if (window.realStorage || window.localStorage === undefined) {
+if (window.realStorage || !window.localStorage) {
     return;
 }
 

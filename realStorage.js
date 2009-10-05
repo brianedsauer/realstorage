@@ -151,10 +151,19 @@ function wrapStorageArea(storageArea) {
 }
 
 
-window.realStorage = wrapStorageArea(window.localStorage);
-window.realStorage.local = window.realStorage;
-try {  // Firefox 3.5 does not have sessionStorage for file://
-    window.realStorage.session = wrapStorageArea(window.sessionStorage);
+if (window.localStorage) {
+    window.realStorage = wrapStorageArea(window.localStorage);
+    window.realStorage.local = window.realStorage;
+}
+else {
+    window.realStorage = {};
+}
+/* Firefox 3.5 throws an exception when you try to access sessionStorage for a
+   page using the file:// protocol */
+try {
+    if (window.sessionStorage) {
+        window.realStorage.session = wrapStorageArea(window.sessionStorage);
+    }
 } 
 catch (exc) {;}
 

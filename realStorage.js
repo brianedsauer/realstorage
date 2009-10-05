@@ -147,6 +147,9 @@ function wrapStorageArea(storageArea) {
 
 window.realStorage = wrapStorageArea(window.localStorage);
 window.realStorage.local = window.realStorage;
-window.realStorage.session = wrapStorageArea(window.sessionStorage);
+try {  // Firefox 3.5 does not have sessionStorage for file://
+    window.realStorage.session = wrapStorageArea(window.sessionStorage);
+} 
+catch (exc) {;}
 
 })();

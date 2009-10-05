@@ -1,26 +1,27 @@
 (function() {
 
-module("non-standard API", {setup: function() {realStorage.clear()}});
+module("non-standard API");
 
-test("contains()", function() {
-    var key = "key";
+storageTest("contains()", function(store) {
+    var key = "some key";
 
-    realStorage.setItem(key, "42");
-    ok(realStorage.contains(key), "true for existing key");
-    ok(!realStorage.contains(key + "bad"), "false for non-existent key");
+    store.setItem(key, "42");
+    ok(store.contains(key), "true for existing key");
+    ok(!store.contains(key + "bad"), "false for non-existent key");
 });
 
-test("contains() returns true for a value of null", function() {
-    var key = "key";
+storageTest("contains() returns true for a value of null", function(store) {
+    var key = "some key";
 
-    realStorage.setItem(key, null);
-    ok(realStorage.contains(key),
+    store.setItem(key, null);
+    ok(store.contains(key),
         "'null' as a value for an existing key is OK");
 });
 
+storageTest("keysArray()", function(store) {
+    store.clear();
 
-test("keysArray()", function() {
-    var keys_array = realStorage.keysArray();
+    var keys_array = store.keysArray();
 
     same(keys_array, [], "empty store returns an empty array");
 
@@ -28,11 +29,11 @@ test("keysArray()", function() {
 
     for (var x in keys) {
         if (keys.hasOwnProperty(x)) {
-            realStorage.setItem(x, x);
+            store.setItem(x, x);
         }
     }
 
-    var keys_array = realStorage.keysArray();
+    var keys_array = store.keysArray();
     var found_keys = {};
 
     for (x=0; x < keys_array.length; x+=1) {
@@ -44,43 +45,44 @@ test("keysArray()", function() {
 });
 
 if (window.JSON !== undefined) {
-    test("getJSONObject()/setJSONObject()", function() {
-        var key = "key";
+    storageTest("getJSONObject()/setJSONObject()", function(store) {
+        var key = "some key";
         var value = {answer: 42};
 
-        realStorage.setJSONObject(key, value);
-        same(realStorage.getJSONObject(key), value,
+        store.setJSONObject(key, value);
+        same(store.getJSONObject(key), value,
                 "value returned as an Object");
     });
 
-    test("getJSONObject()/setJSONObject() do not coerce", function() {
-        var key = "key";
+    storageTest("getJSONObject()/setJSONObject() do not coerce",
+            function(store) {
+        var key = "some key";
         var value = 42;
 
-        realStorage.setJSONObject(key, value);
-        same(realStorage.getJSONObject(key), value,
+        store.setJSONObject(key, value);
+        same(store.getJSONObject(key), value,
                 "in went a number, out came a number");
 
-        realStorage.setJSONObject(key, String(value));
-        same(realStorage.getJSONObject(key), String(value),
+        store.setJSONObject(key, String(value));
+        same(store.getJSONObject(key), String(value),
                 "in went a string, out came a string");
     });
 
-    test("optional arguments to setJSONObject()", function() {
-        var key = "key";
+    storageTest("optional arguments to setJSONObject()", function(store) {
+        var key = "some key";
         var value = {yes: true, no: false};
         var whitelist = ["yes"];
         var expect = {yes: true};
 
-        realStorage.setJSONObject(key, value, whitelist);
-        same(realStorage.getJSONObject(key), expect,
+        store.setJSONObject(key, value, whitelist);
+        same(store.getJSONObject(key), expect,
                 "second argument passed through to JSON.stringify()");
 
         /* Hard to test the third argument as Safari 4 and Firefox 3.5 disagree
            on its usage. */
     });
 
-    test("optional arguments to getJSONObject()", function() {
+    storageTest("optional arguments to getJSONObject()", function(store) {
         var doubleValue = function(key, value) {
             if ((typeof value) === (typeof 42)) {
                 return value * 2;
@@ -89,12 +91,12 @@ if (window.JSON !== undefined) {
                 return value;
             }
         };
-        var key = "key";
+        var key = "some key";
         var value = {1: 1, 2: 2, 3: 3};
         var expect = {1: 2, 2: 4, 3: 6};
 
-        realStorage.setJSONObject(key, value);
-        same(realStorage.getJSONObject(key, doubleValue), expect,
+        store.setJSONObject(key, value);
+        same(store.getJSONObject(key, doubleValue), expect,
                 "second argument passed through to JSON.parse()");
     });
 }

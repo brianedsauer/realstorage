@@ -5,44 +5,47 @@
         <link rel="stylesheet" href="qunit/testsuite.css" type="text/css"
             media="screen">
 
-        <!-- QUnit: r6523 - 2009-07-05 -->
-        <script type="text/javascript" src="qunit/jquery-1.3.2.min.js">
-        </script>
-	<script type="text/javascript" src="qunit/testrunner.js"></script>
         <!-- To test -->
         <script type="text/javascript" src="../realStorage.js"></script>
         <script type="text/javascript">
             (function() {
-            if (!window.localStorage) {
-                alert("localStorage is not supported.");
+
+            function createTest(details, testFxn, name, storageArea) {
+                test([name, "--", details].join(' '), function() {
+                    testFxn(storageArea);
+                });
             }
 
-            var GETparams = location.search.slice(1).split("&");
-            var args_regex = /^store=((?:local|session|real)Storage)$/;
-            var teststore = "realStorage";
-            for (var x in GETparams) {
-                var result = args_regex.exec(GETparams[x]);
-                if (result) {
-                    teststore = result[1];
-                    break;
+            var areas = [];
+            var area_names = ["local", "session"];
+            for (var x=0; x < area_names.length; x+=1) {
+                var name = area_names[x];
+
+                if (realStorage[name] !== undefined) {
+                    areas.push([name, realStorage[name]]);
                 }
             }
-        try {
-            window.teststore = window[teststore];
-        }
-        catch (e) {
-            alert("when setting Web Storage implementation: " + e);
-            throw e;
-        }
-        if (!window.teststore === undefined) {
-            alert("test Storage instance " + teststore + " not found");
-        }
-        })();
+
+            function storageTest(details, testFxn) {
+                for (var x=0; x < areas.length; x+=1) {
+                    var name = areas[x][0];
+                    var area = areas[x][1];
+
+                    createTest(details, testFxn, name, area);
+                }
+            }
+
+            window.storageTest = storageTest;
+
+            })();
         </script>
+        <!-- QUnit: r6523 - 2009-07-05 -->
+        <script type="text/javascript" src="qunit/jquery-1.3.2.min.js">
+        </script>
+	<script type="text/javascript" src="qunit/testrunner.js"></script>
         <!-- Tests -->
         <script type="text/javascript" src="w3c.js"></script>
-        <script type="text/javascript" src="non-standard.js"></script>
-
+        <!--<script type="text/javascript" src="non-standard.js"></script>-->
 </head>
 <body class="flora">
 	<!-- Test HTML -->

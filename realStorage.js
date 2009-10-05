@@ -5,15 +5,11 @@
 */
 (function() {
 
-// No need to re-initialize
-if (window.realStorage) {
+// No need to re-initialize or bother if localStorage doesn't exist
+if (window.realStorage || window.localStorage === undefined) {
     return;
 }
 
-// localStorage is a pre-requisite
-if (!window.localStorage) {
-    throw new Error("realStorage requires localStorage");
-}
 
 function wrapStorageArea(storageArea) {
 

@@ -6,7 +6,7 @@ var pesky_keys = [[42, "42"], [null, "null"], [undefined, "undefined"]];
 module("W3C spec");
 
 storageTest("setItem() & getItem() work for strings", function(store) {
-    var key = "key";
+    var key = "some key";
     var value = "value";
 
     store.setItem(key, value);
@@ -108,7 +108,7 @@ storageTest("length", function(store) {
 
     same(store.length, 0, "length == 0 after a clear");
 
-    var key = "key";
+    var key = "some key";
     store.setItem(key, "42");
     same(store.length, 1, "length++ after a set")
 

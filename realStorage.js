@@ -23,7 +23,7 @@ function wrapStorageArea(storageArea) {
 
                 If index is >= the length of the store, then return null.
             */
-            if (index >= this.length) {
+            if (index >= storageArea.length) {
                 return null;
             }
             else {
@@ -142,10 +142,14 @@ function wrapStorageArea(storageArea) {
        STANDARD
        The number of keys in the store.
     */
-    // JSLint complains about ``get length()`` descriptor being invalid syntax.
-    // ECMA5: Make into a proper descriptor.
-    wrapper.__defineGetter__("length", function() {
-            return storageArea.length;});
+    if (Object.defineProperty) {
+        Object.defineProperty(wrapper, "length",
+                {get: function() { return storageArea.length; }});
+    }
+    else {
+        wrapper.__defineGetter__("length", function() {
+                return storageArea.length;});
+    }
 
     return wrapper;
 }
@@ -165,6 +169,6 @@ try {
         window.realStorage.session = wrapStorageArea(window.sessionStorage);
     }
 } 
-catch (exc) {;}
+catch (exc) {}
 
 })();

@@ -16,9 +16,8 @@ DELETE FROM realStorage WHERE key=?
 -- length
 SELECT COUNT(*) FROM realStorage
 
--- key() ?
-SELECT key FROM realStorage
--- iterate through until nth row hit
+-- key()
+SELECT key FROM realStorage LIMIT 1 OFFSET ?
 
 
 Values coerced to strings? Including null?

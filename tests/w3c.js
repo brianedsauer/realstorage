@@ -104,6 +104,10 @@ storageTest("clear() is a no-op if no keys exist", function(store) {
 });
 
 storageTest("length", function(store) {
+    if (!store.hasOwnProperty('length')) {
+        return;
+    }
+
     store.clear();
 
     same(store.length, 0, "length == 0 after a clear");
@@ -136,7 +140,7 @@ storageTest("key() works for all known keys", function(store) {
         }
     }
 
-    for (var x=0; x < store.length; x+=1) {
+    for (var x=0; x < store.getLength(); x+=1) {
         key = store.key(x);
         ok(keys[key], "key returned by key() is valid");
         key_count -= 1;
@@ -156,7 +160,7 @@ storageTest("key() is stable as long as no keys added/removed",
         }
     }
 
-    for (var x=0; x < store.length; x+=1) {
+    for (var x=0; x < store.getLength(); x+=1) {
         keys[store.key(x)] = x;
     }
 
@@ -174,24 +178,24 @@ storageTest("key() adjusts properly when a key is removed", function(store) {
     store.setItem("key 2", "2");
     store.setItem("key 3", "3");
 
-    same(store.length, 3, "three keys stored");
+    same(store.getLength(), 3, "three keys stored");
 
     var key = store.key(1);
     store.removeItem(key);
-    same(store.length, 2, "two keys left");
+    same(store.getLength(), 2, "two keys left");
 
     ok(store.key(1) !== key, "key(1) changed");
 });
 
 storageTest("key() returns null when given an index >= the # of keys " +
-     "(Firefox 3.5/Safari 4 incompatibility", function(store) {
+     "(Firefox 3.5/Safari 4 incompatibility)", function(store) {
     store.clear();
 
     // Specification says nothing about negative values
     var indices = [0, 1];
 
     for (var x=0; x < indices.length; x+=1) {
-        ok(indices[x] >= store.length,
+        ok(indices[x] >= store.getLength(),
             "index " + indices[x] + " >= the # of keys");
         try {
             same(store.key(indices[x]), null,

@@ -134,6 +134,9 @@ function wrapStorageArea(storageArea) {
 
             storageArea.setItem(key !== null ? key : "null",
                                 JSON.stringify.apply(null, args));
+        },
+        getLength: function getLength() {
+            return storageArea.length;
         }
     };
 
@@ -142,13 +145,10 @@ function wrapStorageArea(storageArea) {
        STANDARD
        The number of keys in the store.
     */
-    if (Object.defineProperty) {
-        Object.defineProperty(wrapper, "length",
-                {get: function() { return storageArea.length; }});
-    }
-    else {
+    if (wrapper.__defineGetter__) {
         wrapper.__defineGetter__("length", function() {
-                return storageArea.length;});
+                return storageArea.length;
+        });
     }
 
     return wrapper;

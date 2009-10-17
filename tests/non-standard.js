@@ -99,6 +99,27 @@ if (window.JSON !== undefined) {
         same(store.getObject(key, doubleValue), expect,
                 "second argument passed through to JSON.parse()");
     });
-}
+
+storageTest("getLength()", function(store) {
+    store.clear();
+
+    same(store.getLength(), 0, "length == 0 after a clear");
+
+    var key = "some key";
+    store.setItem(key, "42");
+    same(store.getLength(), 1, "length++ after a set")
+
+    store.setItem(key, "-13");
+    same(store.getLength(), 1,
+            "length unchanged when changing the value of an existing key");
+
+    store.removeItem(key);
+    same(store.getLength(), 0, "length-- after a removal");
+
+    store.setItem(key, "42");
+    same(store.getLength(), 1, "length++ after another set");
+    store.clear();
+    same(store.getLength(), 0, "length == 0 after another clear");
+});}
 
 })();

@@ -258,4 +258,6 @@ try {
 } 
 catch (exc) {}
 
+window.realStorage.gears = wrapGears();
+
 })();

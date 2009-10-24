@@ -49,6 +49,7 @@ function wrapGears() {
 
         key: function key(index) {
             var result = db.execute('SELECT key FROM realStorage ' +
+                                    'ORDER BY key ASC ' +
                                     'LIMIT 1 OFFSET ?', [index]);
 
             return result.field(0);
@@ -66,7 +67,7 @@ function wrapGears() {
     storageArea.keysArray = function keysArray() {
         var keys_array = [];
 
-        for (var x=0; x < storageArea.length; x+=1) {
+        for (var x=0; x < storageArea.getLength(); x+=1) {
             keys_array.push(storageArea.key(x));
         }
 

@@ -264,6 +264,8 @@ try {
 } 
 catch (exc) {}
 
-window.realStorage.gears = wrapGears();
+if (window.google && google.gears) {
+    window.realStorage.gears = wrapGears();
+}
 
 })();

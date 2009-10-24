@@ -28,13 +28,14 @@ function wrapGears() {
         getItem: function getItem(key) {
            var result = db.execute('SELECT value FROM realStorage WHERE key=?',
                                    [String(key)]);
+           var to_return = null;
 
-           if (!result.isValidRow()) {
-               return null;
+           if (result.isValidRow()) {
+               to_return = result.field(0);
            }
-           else {
-               return result.field(0);
-           }
+           result.close();
+
+           return to_return;
         },
 
         removeItem: function removeItem(key) {
@@ -44,7 +45,9 @@ function wrapGears() {
         getLength: function getLength() {
             var result = db.execute('SELECT COUNT(*) FROM realStorage');
 
-            return result.field(0);
+            var to_return = result.field(0);
+            result.close();
+            return to_return;
         },
 
         key: function key(index) {
@@ -52,7 +55,9 @@ function wrapGears() {
                                     'ORDER BY key ASC ' +
                                     'LIMIT 1 OFFSET ?', [index]);
 
-            return result.field(0);
+            var to_return = result.field(0);
+            result.close();
+            return to_return;
         },
 
         clear: function clear() {

@@ -11,6 +11,93 @@ if (window.realStorage || !window.localStorage) {
 }
 
 
+function wrapGears() {
+    var db = google.gears.factory.create('beta.database');
+    db.open('realStorage-db');
+
+    db.execute('CREATE TABLE IF NOT EXISTS realStorage ' +
+               '(key TEXT PRIMARY KEY, value TEXT)');
+
+
+    var storageArea = {
+        setItem: function setItem(key, value) {
+            db.execute('INSERT OR REPLACE INTO realStorage VALUES (?, ?)',
+                        [String(key), String(value)]);
+        },
+        
+        getItem: function getItem(key) {
+           var result = db.execute('SELECT value FROM realStorage WHERE key=?',
+                                   [String(key)]);
+
+           if (!result.isValidRow()) {
+               return null;
+           }
+           else {
+               return result.field(0);
+           }
+        },
+
+        removeItem: function removeItem(key) {
+            db.execute('DELETE FROM realStorage WHERE key=?', [String(key)]);
+        },
+
+        getLength: function getLength() {
+            var result = db.execute('SELECT COUNT(*) FROM realStorage');
+
+            return result.field(0);
+        },
+
+        key: function key(index) {
+            var result = db.execute('SELECT key FROM realStorage ' +
+                                    'LIMIT 1 OFFSET ?', [index]);
+
+            return result.field(0);
+        },
+
+        clear: function clear() {
+            db.execute('DELETE FROM realStorage');
+        }
+    };
+
+    storageArea.contains = function contains(key) {
+        return storageArea.getItem(key !== null ? key : "null") !== null;
+    };
+
+    storageArea.keysArray = function keysArray() {
+        var keys_array = [];
+
+        for (var x=0; x < storageArea.length; x+=1) {
+            keys_array.push(storageArea.key(x));
+        }
+
+        return keys_array;
+    };
+
+    storageArea.getObject = function getObject(key) {
+        var args = [storageArea.getItem(key !== null ? key : "null")];
+
+        for (var x=1; x < arguments.length; x+=1) {
+            args.push(arguments[x]);
+        }
+
+        return JSON.parse.apply(null, args);
+    };
+
+    storageArea.setObject = function setObject(key, value) {
+        var args = [value];
+
+        for (var x=2; x < arguments.length; x+=1) {
+            args.push(arguments[x]);
+        }
+
+        storageArea.setItem(key !== null ? key : "null",
+                            JSON.stringify.apply(null, args));
+    };
+
+    return storageArea;
+}
+
+
 function wrapStorageArea(storageArea) {
 
     var wrapper = {

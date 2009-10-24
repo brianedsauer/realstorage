@@ -5,7 +5,7 @@ SELECT name FROM sqlite_master WHERE type='table' AND name='realStorage'
 CREATE TABLE IF NOT EXISTS realStorage (key TEXT PRIMARY KEY, value TEXT)
 
 -- setItem()
-INSERT OR REPLACE INTO realStorage (?, ?)
+INSERT OR REPLACE INTO realStorage VALUES (?, ?)
 
 -- getItem()
 SELECT value FROM realStorage WHERE key=?

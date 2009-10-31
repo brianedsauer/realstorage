@@ -198,36 +198,27 @@ function wrapStorageArea(storageArea) {
             return keys_array;
         },
 
-        getObject: function getObject(key) {
+        getObject: function getObject(key, jsonArg) {
             /*
                (key:String, [*args]) -> Object
 
                Return a parsed JSON object stored under the specified key.
             */
-            var args = [storageArea.getItem(key !== null ? key : "null")];
+            var json = storageArea.getItem(key !== null ? key : "null");
 
-            for (var x=1; x < arguments.length; x+=1) {
-                args.push(arguments[x]);
-            }
-
-            return JSON.parse.apply(null, args);
+            return JSON.parse(json, jsonArg);
         },
 
-        setObject: function setObject(key, value) {
+        setObject: function setObject(key, value, jsonArg1, jsonArg2) {
             /*
                (key:String, value: Object, [*args]) -> null
 
                Store a JSON-compatible object.
             */
-            var args = [value];
-
-            for (var x=2; x < arguments.length; x+=1) {
-                args.push(arguments[x]);
-            }
-
-            storageArea.setItem(key !== null ? key : "null",
-                                JSON.stringify.apply(null, args));
+            var json = JSON.stringify(value, jsonArg1, jsonArg2);
+            storageArea.setItem(key !== null ? key : "null", json);
         },
+
         getLength: function getLength() {
             return storageArea.length;
         }

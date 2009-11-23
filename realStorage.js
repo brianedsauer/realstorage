@@ -6,62 +6,78 @@
 (function() {
 
 // No need to re-initialize or bother if localStorage doesn't exist
-if (window.realStorage || !window.localStorage) {
+if (window.realStorage) {
     return;
 }
 
 
 function wrapGears() {
-    var db = google.gears.factory.create('beta.database');
-    db.open('realStorage-db');
 
-    db.execute('CREATE TABLE IF NOT EXISTS realStorage ' +
-               '(key TEXT PRIMARY KEY, value TEXT)');
+    function dbExecute(sql, args, process) {
+        var db = google.gears.factory.create('beta.database');
+        db.open('realStorage-db');
 
+        db.execute('CREATE TABLE IF NOT EXISTS realStorage ' +
+                   '(key TEXT PRIMARY KEY, value TEXT)');
+
+        var result = db.execute(sql, args);
+
+        var to_return = null;
+        if (process !== undefined) {
+            to_return = process(result);
+        }
+
+        result.close();
+        db.close();
+
+        return to_return;
+    }
 
     var storageArea = {
         setItem: function setItem(key, value) {
-            db.execute('INSERT OR REPLACE INTO realStorage VALUES (?, ?)',
+            dbExecute('INSERT OR REPLACE INTO realStorage VALUES (?, ?)',
                         [String(key), String(value)]);
         },
         
         getItem: function getItem(key) {
-           var result = db.execute('SELECT value FROM realStorage WHERE key=?',
-                                   [String(key)]);
-           var to_return = null;
-
-           if (result.isValidRow()) {
-               to_return = result.field(0);
-           }
-           result.close();
-
-           return to_return;
+            function process(result) {
+                if (result.isValidRow()) {
+                   return result.field(0);
+                }
+                
+                else {
+                    return null;
+                }
+            }
+       
+           return dbExecute('SELECT value FROM realStorage WHERE key=?',
+                                   [String(key)], process);
         },
 
         removeItem: function removeItem(key) {
-            db.execute('DELETE FROM realStorage WHERE key=?', [String(key)]);
+            dbExecute('DELETE FROM realStorage WHERE key=?', [String(key)]);
         },
 
         getLength: function getLength() {
-            var result = db.execute('SELECT COUNT(*) FROM realStorage');
+            function process(result) {
+                return result.field(0);
+            }
 
-            var to_return = result.field(0);
-            result.close();
-            return to_return;
+            return dbExecute('SELECT COUNT(*) FROM realStorage', [], process);
         },
 
         key: function key(index) {
-            var result = db.execute('SELECT key FROM realStorage ' +
-                                    'ORDER BY key ASC ' +
-                                    'LIMIT 1 OFFSET ?', [index]);
+            function process(result) {
+                return result.field(0);
+            }
 
-            var to_return = result.field(0);
-            result.close();
-            return to_return;
+            return dbExecute('SELECT key FROM realStorage ' +
+                                    'ORDER BY key ASC ' +
+                                    'LIMIT 1 OFFSET ?', [index], process);
         },
 
         clear: function clear() {
-            db.execute('DELETE FROM realStorage');
+            dbExecute('DELETE FROM realStorage');
         }
     };
 
@@ -238,25 +254,34 @@ function wrapStorageArea(storageArea) {
     return wrapper;
 }
 
-
 if (window.localStorage) {
-    window.realStorage = wrapStorageArea(window.localStorage);
-    window.realStorage.local = window.realStorage;
-}
-else {
-    window.realStorage = {};
+    var localWrapped = wrapStorageArea(window.localStorage);
 }
 /* Firefox 3.5 throws an exception when you try to access sessionStorage for a
    page using the file:// protocol */
 try {
     if (window.sessionStorage) {
-        window.realStorage.session = wrapStorageArea(window.sessionStorage);
+        var sessionWrapped = wrapStorageArea(window.sessionStorage);
     }
 } 
 catch (exc) {}
 
 if (window.google && google.gears) {
-    window.realStorage.gears = wrapGears();
+    gearsWrapped = wrapGears();
 }
+
+if (localWrapped) {
+    window.realStorage = localWrapped;
+}
+else if (gearsWrapped) {
+    window.realStorage = gearsWrapped;
+}
+else {
+    window.realStorage = {};
+}
+
+window.realStorage.local = localWrapped;
+window.realStorage.session = sessionWrapped;
+window.realStorage.gears = gearsWrapped;
 
 })();

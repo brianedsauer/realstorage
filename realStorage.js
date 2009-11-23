@@ -254,9 +254,12 @@ function wrapStorageArea(storageArea) {
     return wrapper;
 }
 
-if (window.localStorage) {
-    var localWrapped = wrapStorageArea(window.localStorage);
-}
+var localWrapped = window.localStorage ?
+                    wrapStorageArea(window.localStorage) : undefined;
+var sessionWrapped = undefined;
+var gearsWrapped = window.google && google.gears ?
+                    wrapGears() : undefined;
+
 /* Firefox 3.5 throws an exception when you try to access sessionStorage for a
    page using the file:// protocol */
 try {
@@ -266,10 +269,7 @@ try {
 } 
 catch (exc) {}
 
-if (window.google && google.gears) {
-    gearsWrapped = wrapGears();
-}
-
+// Set default realStorage implementation.
 if (localWrapped) {
     window.realStorage = localWrapped;
 }
@@ -280,8 +280,15 @@ else {
     window.realStorage = {};
 }
 
-window.realStorage.local = localWrapped;
-window.realStorage.session = sessionWrapped;
-window.realStorage.gears = gearsWrapped;
+// Bind storage properties.
+if (localWrapped !== undefined) {
+    window.realStorage.local = localWrapped;
+}
+if (sessionWrapped !== undefined) {
+    window.realStorage.session = sessionWrapped;
+}
+if (gearsWrapped !== undefined) {
+    window.realStorage.gears = gearsWrapped;
+}
 
 })();

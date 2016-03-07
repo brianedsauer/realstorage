@@ -1,0 +1,1 @@
+realStorage is meant to create a consistent API for the W3C Web Storage key/value store specification  (i.e. work around browser bugs). It also adds some convenience functions to help flesh out the localStorage key/value API. And when Web Storage is not available, a [Gears](http://gears.google.com) fallback is provided.
